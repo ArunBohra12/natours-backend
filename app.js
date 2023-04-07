@@ -12,10 +12,7 @@ const compression = require('compression');
 
 const AppError = require('./utils/appError');
 
-const tourRouter = require('./routes/tourRoutes');
-const userRouter = require('./routes/userRoutes');
-const reviewRouter = require('./routes/reviewRoutes');
-const bookingRouter = require('./routes/bookingRoutes');
+const v1Router = require('./routes/v1Router');
 const bookingController = require('./controllers/bookingController');
 const globalErrorHandler = require('./controllers/errorController');
 
@@ -94,10 +91,7 @@ app.use(compression());
 // Routes
 
 // API Routes
-app.use('/api/v1/tours', tourRouter);
-app.use('/api/v1/users', userRouter);
-app.use('/api/v1/reviews', reviewRouter);
-app.use('/api/v1/bookings', bookingRouter);
+app.use('/api/v1', v1Router);
 
 app.all('*', (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
