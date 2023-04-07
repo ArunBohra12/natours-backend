@@ -6,17 +6,18 @@ const Tour = require('../models/tourModel');
 const Review = require('../models/reviewModel');
 const User = require('../models/userModel');
 
-dotenv.config({ path: './config.env' });
+dotenv.config({ path: `${__dirname}/../config.env` });
 
 const DB = process.env.DATABASE.replace('<password>', process.env.DATABASE_PASSWORD);
 
+mongoose.set('strictQuery', false);
 mongoose.connect(DB);
 
 // Read JSON file
 
-const tours = JSON.parse(fs.readFileSync(`${__dirname}/data/tours.json`, 'utf-8'));
-const users = JSON.parse(fs.readFileSync(`${__dirname}/data/users.json`, 'utf-8'));
-const reviews = JSON.parse(fs.readFileSync(`${__dirname}/data/reviews.json`, 'utf-8'));
+const tours = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/tours.json`, 'utf-8'));
+const users = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/users.json`, 'utf-8'));
+const reviews = JSON.parse(fs.readFileSync(`${__dirname}/../dev-data/data/reviews.json`, 'utf-8'));
 
 // Import data to DB
 const importData = async () => {

@@ -7,7 +7,9 @@
     "start": "node server.js",
     "start:dev": "nodemon server.js",
     "start:prod": "SET NODE_ENV=production&&nodemon server.js",
-    "debug": "ndb server.js"
+    "debug": "ndb server.js",
+    "import-dev-data": "node ./scripts/import-dev-data --import",
+    "delete-dev-data": "node ./scripts/import-dev-data --delete"
   },
   "engines": {
     "node": "^16",
