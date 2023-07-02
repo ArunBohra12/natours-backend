@@ -1,0 +1,24 @@
+{
+  "name": "natours-backend",
+  "version": "2.0.0",
+  "description": "Exciting tours for adventurous people. Natours is an application for users to book tours.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ArunBohra12/natours-backend.git"
+  },
+  "author": "Arun Bohra",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ArunBohra12/natours-backend/issues"
+  },
+  "homepage": "https://github.com/ArunBohra12/natours-backend#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  }
+}

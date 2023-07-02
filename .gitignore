@@ -1,5 +1,6 @@
 # Add the folders/files that should not be pushed into production
 node_modules
 config.env
+.env
 .vs
 .vscode
