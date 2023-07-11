@@ -3,10 +3,9 @@
   "arrowParens": "avoid",
   "bracketSameLine": true,
   "tabWidth": 2,
-  "jsxSingleQuote": true,
   "bracketSpacing": true,
   "useTabs": false,
   "singleQuote": true,
   "trailingComma": "es5",
-  "endOfLine": "auto"
+  "endOfLine": "lf"
 }

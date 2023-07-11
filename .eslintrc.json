@@ -19,11 +19,17 @@
       {
         "endOfLine": "auto"
       }
+    ],
+    "import/extensions": [
+      "error",
+      {
+        "js": "ignorePackages"
+      }
     ]
   },
   "env": { "es2021": true },
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 12,
     "sourceType": "module"
   }
 }
