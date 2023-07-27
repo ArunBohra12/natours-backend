@@ -1,8 +1,9 @@
 /* eslint-disable import/prefer-default-export */
 
+import catchAsync from '../../utils/catchAsync.js';
 import User from '../models/userModel.js';
 
-export const userSignup = async (req, res) => {
+export const userSignup = catchAsync(async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const user = await User.create({
@@ -16,4 +17,4 @@ export const userSignup = async (req, res) => {
     message: 'User created successfully',
     data: user,
   });
-};
+});
