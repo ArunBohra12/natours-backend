@@ -3,7 +3,7 @@
 import catchAsync from '../utils/catchAsync.js';
 import User from '../models/userModel.js';
 import AppError from '../error/appError.js';
-import { uploadProfileImage } from '../utils/upload.js';
+import { uploadProfileImage } from '../utils/imageUpload.js';
 
 export const userSignup = catchAsync(async (req, res, next) => {
   const { name, email, password } = req.body;
