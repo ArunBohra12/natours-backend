@@ -1,5 +1,3 @@
-/* eslint-disable import/prefer-default-export */
-
 import catchAsync from '../utils/catchAsync.js';
 import User from '../models/userModel.js';
 import AppError from '../error/appError.js';
