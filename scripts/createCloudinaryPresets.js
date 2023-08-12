@@ -9,6 +9,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import dotenv from 'dotenv';
 import { v2 as cloudinary } from 'cloudinary';
+import logger from '../app/logger/logger';
 
 dotenv.config({ path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.env') });
 
@@ -37,9 +38,9 @@ class CloudinaryPresets {
         ],
       });
 
-      console.log('Success: Transform Profile Image Preset');
+      logger.info('Success: Transform Profile Image Preset');
     } catch (err) {
-      console.log('Error: Transform Profile Image Preset', err);
+      logger.error('Error: Transform Profile Image Preset', err);
     }
   }
 

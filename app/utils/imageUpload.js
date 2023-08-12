@@ -6,6 +6,7 @@ import path from 'node:path';
 import { promisify } from 'node:util';
 import uploadImage from './cloudinary.js';
 import AppError from '../error/appError.js';
+import logger from '../logger/logger.js';
 import { UPLOAD_PRESETS } from '../../config/constants.js';
 
 export const uploadProfileImage = async (file, fileName) => {
@@ -30,7 +31,7 @@ export const uploadProfileImage = async (file, fileName) => {
     // Always remove the temporary file, regardless of the outcome
     fs.unlink(tempFilePath, err => {
       // TODO: Need to send email for this error
-      if (err) console.log('Error deleting file: ', err);
+      if (err) logger.error('Error deleting file: ', err);
     });
   }
 };
