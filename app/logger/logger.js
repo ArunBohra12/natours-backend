@@ -21,16 +21,20 @@ winston.addColors({
 
 const winstonTransports = [];
 
-if (process.env.NODE_ENV !== 'production') {
-  const consoleTransport = new winston.transports.Console({
-    format: winston.format.combine(
-      winston.format.colorize({ all: true }),
-      winston.format.printf(info => `${info.level}: ${info.message}`)
-    ),
-  });
+// Ignore info level on production
+const ignoreInfoLogsProduction = winston.format(info => {
+  if (process.env.NODE_ENV === 'production' && info.level === 'info') return false;
 
-  winstonTransports.push(consoleTransport);
-}
+  return info;
+});
+
+const consoleTransport = new winston.transports.Console({
+  format: winston.format.combine(
+    ignoreInfoLogsProduction(),
+    winston.format.colorize({ all: true }),
+    winston.format.printf(info => `${info.level}: ${info.message}`)
+  ),
+});
 
 // Write logs to *.log files only if enabled or is production
 if (process.env.NODE_ENV === 'production' || process.env.ENABLE_LOGS === 'enable') {
@@ -58,6 +62,6 @@ if (process.env.NODE_ENV === 'production' || process.env.ENABLE_LOGS === 'enable
   );
 }
 
-const logger = winston.createLogger({ transports: winstonTransports });
+const logger = winston.createLogger({ transports: [consoleTransport, ...winstonTransports] });
 
 export default logger;
