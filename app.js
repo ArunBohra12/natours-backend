@@ -2,6 +2,7 @@ import express from 'express';
 import AppError from './app/error/appError.js';
 import globalErrorHandler from './app/error/globalErrorHandler.js';
 import userRouter from './app/routes/userRoutes.js';
+import tourRouter from './app/routes/tourRoutes.js';
 
 const app = express();
 
@@ -16,6 +17,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/user', userRouter);
+app.use('/api/tour', tourRouter);
 
 // Matches unavailable routes
 app.all('*', (req, res, next) => {
