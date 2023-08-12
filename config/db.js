@@ -1,13 +1,13 @@
 /* eslint-disable no-console */
 import mongoose from 'mongoose';
+import logger from '../app/logger/logger.js';
 
 const connectDB = async url => {
   try {
     await mongoose.connect(url);
-    console.log('Connected to the DB');
+    logger.info('Connected to the DB');
   } catch (error) {
-    console.log('Unable to connect to the DB.');
-    console.log(`URL: ${url}`);
+    logger.error(`Unable to connect to the DB. URL: ${url}`);
   }
 };
 
