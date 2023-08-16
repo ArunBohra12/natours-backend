@@ -12,7 +12,7 @@ export const createTour = catchAsync(async (req, res, next) => {
 });
 
 export const getAllTours = catchAsync(async (req, res, next) => {
-  const allTours = await Tour.find();
+  const allTours = await Tour.find(req.tourFilter || {});
 
   res.status(200).json({
     status: 1,
