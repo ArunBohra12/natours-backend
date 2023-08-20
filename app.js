@@ -3,6 +3,7 @@ import AppError from './app/error/appError.js';
 import globalErrorHandler from './app/error/globalErrorHandler.js';
 import userRouter from './app/routes/userRoutes.js';
 import tourRouter from './app/routes/tourRoutes.js';
+import authRouter from './app/routes/authRoutes.js';
 
 const app = express();
 
@@ -18,6 +19,7 @@ app.get('/', (req, res) => {
 
 app.use('/api/user', userRouter);
 app.use('/api/tour', tourRouter);
+app.use('/api/auth', authRouter);
 
 // Matches unavailable routes
 app.all('*', (req, res, next) => {
