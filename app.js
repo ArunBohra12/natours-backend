@@ -3,8 +3,11 @@ import AppError from './app/error/appError.js';
 import globalErrorHandler from './app/error/globalErrorHandler.js';
 import userRouter from './app/routes/userRoutes.js';
 import tourRouter from './app/routes/tourRoutes.js';
+import corsMiddleware from './app/middlewares/cors.js';
 
 const app = express();
+
+app.use(corsMiddleware());
 
 // Body parser, reading data from body into req.body
 app.use(express.json());
