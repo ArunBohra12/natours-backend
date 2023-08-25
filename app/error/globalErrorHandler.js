@@ -13,7 +13,7 @@ const handleDevelopmentErrors = (err, res) => {
 // Handles errors in production
 const handleProductionErrors = (err, res) => {
   if (err.isOperational === true) {
-    res.status(err.statusCode).json({
+    return res.status(err.statusCode).json({
       status: 0,
       type: err.type,
       message: err.message,
