@@ -1,5 +1,5 @@
 import cors from 'cors';
-import AllowedOrigins from '../controllers/allowedOriginsModel.js';
+import AllowedOrigins from '../models/allowedOriginsModel.js';
 import AppError from '../error/appError.js';
 import logger from '../logger/logger.js';
 

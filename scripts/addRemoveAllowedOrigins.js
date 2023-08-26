@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import dotenv from 'dotenv';
 import validator from 'validator';
-import AllowedOrigins from '../app/controllers/allowedOriginsModel.js';
+import AllowedOrigins from '../app/models/allowedOriginsModel.js';
 import connectDB from '../config/db.js';
 
 dotenv.config({ path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.env') });
