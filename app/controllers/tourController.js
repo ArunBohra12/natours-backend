@@ -1,8 +1,22 @@
 import Tour from '../models/tourModel.js';
 import catchAsync from '../utils/catchAsync.js';
+import { filterObject } from '../utils/filters.js';
 
 export const createTour = catchAsync(async (req, res, next) => {
-  const tour = await Tour.create(req.body);
+  const filterBodyParams = [
+    'name',
+    'duration',
+    'maxGroupSize',
+    'difficulty',
+    'price',
+    'summary',
+    'description',
+    'startDates',
+    'startLocation',
+    'locations',
+  ];
+
+  const tour = await Tour.create(filterObject(req.body, filterBodyParams));
 
   res.status(201).json({
     status: 1,
