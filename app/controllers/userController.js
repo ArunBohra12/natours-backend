@@ -2,15 +2,12 @@ import catchAsync from '../utils/catchAsync.js';
 import User from '../models/userModel.js';
 import AppError from '../error/appError.js';
 import { uploadProfileImage } from '../utils/imageUpload.js';
+import { filterObject } from '../utils/filters.js';
 
 export const userSignup = catchAsync(async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const userData = filterObject(req.body, ['name', 'email', 'password']);
 
-  const user = await User.create({
-    name,
-    email,
-    password,
-  });
+  const user = await User.create(userData);
 
   res.status(201).json({
     status: 1,
