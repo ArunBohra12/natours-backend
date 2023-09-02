@@ -10,7 +10,7 @@ export const userSignup = catchAsync(async (req, res, next) => {
   const user = await User.create(userData);
 
   res.status(201).json({
-    status: 1,
+    status: true,
     message: 'User created successfully',
     data: user,
   });
@@ -38,7 +38,7 @@ export const updateUserProfilePhoto = catchAsync(async (req, res, next) => {
   await user.save();
 
   res.status(200).json({
-    status: 1,
+    status: true,
     message: 'Successfully updated profile photo.',
     data: {
       photo: updatedPhoto,
