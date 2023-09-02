@@ -21,9 +21,9 @@ const uploadImage = async (imageUrl, publicId, uploadPreset) => {
       upload_preset: uploadPreset,
     });
 
-    return [1, uploadResult];
+    return [true, uploadResult];
   } catch (error) {
-    return [0, error];
+    return [false, error];
   }
 };
 

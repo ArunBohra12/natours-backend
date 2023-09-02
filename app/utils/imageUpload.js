@@ -13,7 +13,7 @@ export const uploadProfileImage = async (file, fileName) => {
   const { mimetype, buffer: fileBuffer, originalname } = file;
 
   if (!mimetype.startsWith('image/')) {
-    return [0, new AppError('Please provide a valid image', 401)];
+    return [false, new AppError('Please provide a valid image', 401)];
   }
 
   const tempFilePath = path.join(os.tmpdir(), originalname);
@@ -24,9 +24,9 @@ export const uploadProfileImage = async (file, fileName) => {
 
     const data = await uploadImage(tempFilePath, fileName, UPLOAD_PRESETS.profileImages);
 
-    return [1, data];
+    return [true, data];
   } catch (error) {
-    return [0, new AppError('Unable upload image. Please try again.', 401)];
+    return [false, new AppError('Unable upload image. Please try again.', 401)];
   } finally {
     // Always remove the temporary file, regardless of the outcome
     fs.unlink(tempFilePath, err => {

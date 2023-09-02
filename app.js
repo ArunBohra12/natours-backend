@@ -14,7 +14,7 @@ app.use(express.json());
 
 app.get('/', (req, res) => {
   res.status(200).json({
-    status: 'success',
+    status: true,
     message: 'Welcome to the natours application!',
   });
 });
