@@ -10,7 +10,7 @@ export const userSignup = catchAsync(async (req, res, next) => {
   const user = await User.create(userData);
 
   res.status(201).json({
-    status: 1,
+    status: true,
     message: 'User created successfully',
     data: user,
   });
@@ -28,7 +28,7 @@ export const updateUserProfilePhoto = catchAsync(async (req, res, next) => {
 
   const data = await uploadProfileImage(req.file, fileName, next);
 
-  if (data[0] === 0) {
+  if (!data[0]) {
     return next(data[1]);
   }
 
@@ -38,7 +38,7 @@ export const updateUserProfilePhoto = catchAsync(async (req, res, next) => {
   await user.save();
 
   res.status(200).json({
-    status: 1,
+    status: true,
     message: 'Successfully updated profile photo.',
     data: {
       photo: updatedPhoto,

@@ -3,8 +3,8 @@ class AppError extends Error {
     super(message);
     this.statusCode = statusCode || 500;
 
-    // 0 for all the error messages
-    this.status = 0;
+    // false for all the error message
+    this.status = false;
 
     // Tells if we have a server error or if the API failed
     this.type = `${this.statusCode}`.startsWith('4') ? 'fail' : 'error';

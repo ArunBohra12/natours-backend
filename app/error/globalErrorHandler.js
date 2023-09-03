@@ -2,7 +2,7 @@
 // Sends all info about the error
 const handleDevelopmentErrors = (err, res) => {
   res.status(err.statusCode).json({
-    status: 0,
+    status: false,
     type: err.type,
     message: err.message,
     stack: err.stack,
@@ -14,7 +14,7 @@ const handleDevelopmentErrors = (err, res) => {
 const handleProductionErrors = (err, res) => {
   if (err.isOperational === true) {
     return res.status(err.statusCode).json({
-      status: 0,
+      status: false,
       type: err.type,
       message: err.message,
     });
@@ -22,7 +22,7 @@ const handleProductionErrors = (err, res) => {
 
   // Errors that are unknown or programming errors - don't leak details here
   return res.status(500).json({
-    status: 0,
+    status: false,
     type: 'error',
     message: 'Sorry, something went very wrong',
   });
@@ -32,7 +32,7 @@ const handleProductionErrors = (err, res) => {
 // All the errors pass through this middleware
 const globalErrorHandler = (err, req, res, next) => {
   err.statusCode = err.statusCode || 500;
-  err.status = err.status || 0;
+  err.status = err.status || false;
   err.type = err.type || 'fail';
 
   if (process.env.NODE_ENV === 'development') {
