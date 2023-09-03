@@ -28,7 +28,7 @@ export const updateUserProfilePhoto = catchAsync(async (req, res, next) => {
 
   const data = await uploadProfileImage(req.file, fileName, next);
 
-  if (data[0]) {
+  if (!data[0]) {
     return next(data[1]);
   }
 
