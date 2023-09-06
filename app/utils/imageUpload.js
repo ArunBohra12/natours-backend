@@ -35,3 +35,13 @@ export const uploadProfileImage = async (file, fileName) => {
     });
   }
 };
+
+export const uploadProfileImageFromUrl = async (imageUrl, fileName) => {
+  try {
+    const data = await uploadImage(imageUrl, fileName, UPLOAD_PRESETS.profileImages);
+
+    return [true, data];
+  } catch (error) {
+    return [false, new AppError('Unable upload image. Please try again.', 401)];
+  }
+};
