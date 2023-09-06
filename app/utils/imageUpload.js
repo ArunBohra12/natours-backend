@@ -40,8 +40,8 @@ export const uploadProfileImageFromUrl = async (imageUrl, fileName) => {
   try {
     const data = await uploadImage(imageUrl, fileName, UPLOAD_PRESETS.profileImages);
 
-    return [1, data];
+    return [true, data];
   } catch (error) {
-    return [0, new AppError('Unable upload image. Please try again.', 401)];
+    return [false, new AppError('Unable upload image. Please try again.', 401)];
   }
 };

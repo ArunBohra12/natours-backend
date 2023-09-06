@@ -30,7 +30,7 @@ export const signInWithGoogle = catchAsync(async (req, res, next) => {
   }
 
   res.status(200).json({
-    status: 1,
+    status: true,
     message: 'Successfully generated google auth URL',
     data: {
       url: authUrl,
@@ -81,7 +81,7 @@ export const googleAuthVerifyHandler = catchAsync(async (req, res, next) => {
 
     return loginHandler(
       { googleId: newUserId },
-      { status: 1, message: 'Signed up successfully', data: { newUser } },
+      { status: true, message: 'Signed up successfully', data: { newUser } },
       201,
       res
     );
@@ -96,7 +96,7 @@ export const googleAuthVerifyHandler = catchAsync(async (req, res, next) => {
   // Just login user if it already exists
   return loginHandler(
     { googleId: existingUserId },
-    { status: 1, message: 'Logged in successfully', data: { user: existingUser } },
+    { status: true, message: 'Logged in successfully', data: { user: existingUser } },
     200,
     res
   );
