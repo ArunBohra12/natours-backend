@@ -4,7 +4,9 @@ import logger from './app/logger/logger.js';
 
 dotenv.config('./.env');
 
-connectDB(process.env.DATABASE_URL);
+(async () => {
+  await connectDB(process.env.DATABASE_URL);
+})();
 
 // eslint-disable-next-line import/first
 import app from './app.js';

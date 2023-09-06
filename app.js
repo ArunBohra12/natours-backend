@@ -4,8 +4,11 @@ import globalErrorHandler from './app/error/globalErrorHandler.js';
 import userRouter from './app/routes/userRoutes.js';
 import tourRouter from './app/routes/tourRoutes.js';
 import authRouter from './app/routes/authRoutes.js';
+import corsMiddleware from './app/middlewares/cors.js';
 
 const app = express();
+
+app.use(corsMiddleware());
 
 // Body parser, reading data from body into req.body
 app.use(express.json());

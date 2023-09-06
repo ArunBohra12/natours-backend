@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon ./server.js",
-    "start": "node ./server.js"
+    "start": "node ./server.js",
+    "debug": "ndb node ./server.js"
   },
   "repository": {
     "type": "git",
@@ -23,9 +24,12 @@
     "npm": ">=9"
   },
   "dependencies": {
+    "@sendgrid/mail": "^7.7.0",
     "bcrypt": "^5.1.0",
     "cloudinary": "^1.39.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "ejs": "^3.1.9",
     "express": "^4.18.2",
     "googleapis": "^126.0.0",
     "jsonwebtoken": "^9.0.1",
@@ -44,6 +48,7 @@
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-prettier": "^4.2.1",
     "eslint-plugin-react": "^7.32.2",
+    "ndb": "^1.1.5",
     "nodemon": "^3.0.1",
     "prettier": "^2.8.8"
   }
