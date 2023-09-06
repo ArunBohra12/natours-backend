@@ -1,9 +1,9 @@
 import express from 'express';
-import { signInWithGoogle, googleOAuthRedirectHandler } from '../controllers/authController.js';
+import { signInWithGoogle, googleAuthVerifyHandler } from '../controllers/authController.js';
 
 const router = express.Router();
 
 router.get('/google', signInWithGoogle);
-router.get('/google/redirect', googleOAuthRedirectHandler);
+router.get('/google/verify-auth', googleAuthVerifyHandler);
 
 export default router;

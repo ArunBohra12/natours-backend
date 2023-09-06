@@ -22,9 +22,22 @@ const userSchema = new mongoose.Schema({
     enum: ['user', 'guide', 'lead-guide', 'admin'],
     default: 'user',
   },
+  googleAccount: {
+    type: {
+      googleId: {
+        type: String,
+        required: true,
+      },
+      refreshToken: {
+        type: String,
+        required: true,
+      },
+    },
+    required: false,
+    select: false,
+  },
   password: {
     type: String,
-    required: [true, 'Please provide a password'],
     minlength: 8,
     select: false,
   },
@@ -39,7 +52,11 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function (next) {
-  if (this.isNew || this.isModified('password')) {
+  if (!this.isNew || !this.password) {
+    next();
+  }
+
+  if (this.isModified('password')) {
     const salt = await bcrypt.genSalt(12);
     const hash = await bcrypt.hash(this.password, salt);
 
