@@ -6,6 +6,7 @@ import { fileURLToPath } from 'node:url';
 import sendgrid from '@sendgrid/mail';
 import validator from 'validator';
 import ejs from 'ejs';
+import nodemailer from 'nodemailer';
 import logger from '../logger/logger.js';
 
 class EmailHelper {
@@ -65,12 +66,57 @@ class EmailHelper {
     }
 
     try {
+      if (process.env.NODE_ENV === 'development') {
+        const data = await this.sendEmailDev();
+
+        return data;
+      }
+
       const data = await sendgrid.send(this.emailData);
-      return { message: 'Email sent successfully', data };
+
+      return {
+        status: true,
+        message: 'Email sent successfully',
+        data
+      };
     } catch (error) {
       logger.error('Error in sending email to the client');
       logger.error(error);
       throw error;
+    }
+  }
+
+  // This is only for dev environment where we send emails with mailtrap
+  async sendEmailDev() {
+    try {
+      const transport = nodemailer.createTransport({
+        host: process.env.MAILTRAP_EMAIL_HOST,
+        port: process.env.MAILTRAP_EMAIL_PORT,
+        auth: {
+          user: process.env.MAILTRAP_EMAIL_USERNAME,
+          pass: process.env.MAILTRAP_EMAIL_PASSWORD,
+        },
+      });
+
+      const data = await transport.sendMail(this.emailData);
+
+      if (data.rejected.length > 0) {
+        throw data;
+      }
+
+      return {
+        status: true,
+        message: 'Mail sent successfully',
+      }
+    } catch (error) {
+      logger.error('Unable to send mail with mailtrap');
+      logger.error(error);
+
+      return {
+        status: false,
+        err: error,
+        message: 'Unable to send mail with mailtrap',
+      }
     }
   }
 }
