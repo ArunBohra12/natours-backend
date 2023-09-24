@@ -77,7 +77,7 @@ class EmailHelper {
       return {
         status: true,
         message: 'Email sent successfully',
-        data
+        data,
       };
     } catch (error) {
       logger.error('Error in sending email to the client');
@@ -107,7 +107,7 @@ class EmailHelper {
       return {
         status: true,
         message: 'Mail sent successfully',
-      }
+      };
     } catch (error) {
       logger.error('Unable to send mail with mailtrap');
       logger.error(error);
@@ -116,8 +116,25 @@ class EmailHelper {
         status: false,
         err: error,
         message: 'Unable to send mail with mailtrap',
-      }
+      };
     }
+  }
+
+  // Sends the email to notify about any error that occours in the application
+  async sendErrorEmail(subject, errorTemplateData) {
+    const data = { ...errorTemplateData };
+
+    data.error = JSON.stringify(data.error, '', 2);
+    data.date = new Date().toLocaleString('en-US');
+
+    await this.setEmailData({
+      to: process.env.ERROR_EMAIL_TO,
+      subject: subject,
+      templateName: 'appError.ejs',
+      templateData: data,
+    });
+
+    await this.send();
   }
 }
 
