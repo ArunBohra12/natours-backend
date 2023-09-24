@@ -1,4 +1,7 @@
 // Handles all errors in development
+
+import EmailHelper from '../helpers/emailHelper.js';
+
 // Sends all info about the error
 const handleDevelopmentErrors = (err, res) => {
   res.status(err.statusCode).json({
@@ -20,7 +23,24 @@ const handleProductionErrors = (err, res) => {
     });
   }
 
-  // Errors that are unknown or programming errors - don't leak details here
+  // Errors that are unknown or programming errors
+  const email = new EmailHelper();
+
+  // Send an error email for notification
+  (async () => {
+    await email.sendErrorEmail('Error: uploading images', {
+      type: 'Error',
+      message: err.message,
+      description: err.message,
+      component: {
+        name: 'Global Error Handler',
+        file: 'app/error/globalErrorHandler.js',
+      },
+      error: err,
+    });
+  })();
+
+  // Don't leak details to the client side
   return res.status(500).json({
     status: false,
     type: 'error',
