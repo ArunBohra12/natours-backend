@@ -2,7 +2,10 @@ import catchAsync from '../utils/catchAsync.js';
 import User from '../models/userModel.js';
 import AppError from '../error/appError.js';
 import { uploadProfileImage, uploadProfileImageFromUrl } from '../utils/imageUpload.js';
-import { filterObject } from '../utils/filters.js';
+import { filterObject, filterUnwantedItems } from '../utils/filters.js';
+import { emailAddressVerification } from '../utils/sendEmails.js';
+import logger from '../logger/logger.js';
+import loginHandler from '../utils/loginHandler.js';
 
 export const userSignup = catchAsync(async (req, res, next) => {
   const userData = filterObject(req.body, ['name', 'email', 'password']);
@@ -15,11 +18,24 @@ export const userSignup = catchAsync(async (req, res, next) => {
 
   const user = await User.create(userData);
 
-  res.status(201).json({
-    status: true,
-    message: 'User created successfully',
-    data: user,
-  });
+  // Using another try/catch here
+  // to not send errors produced by emailAddressVerification to userSignup request
+  try {
+    await emailAddressVerification(userData.email);
+  } catch (error) {
+    logger.error(error);
+  }
+
+  return loginHandler(
+    filterUnwantedItems(user.toObject(), ['role', 'password', 'isActive', 'isVerified', '__v']),
+    {
+      status: true,
+      message: 'User created successfully',
+      data: user,
+    },
+    201,
+    res
+  );
 });
 
 export const googleUserSignup = async (googleUserData, googleUserTokens) => {

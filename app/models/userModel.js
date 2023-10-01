@@ -49,6 +49,19 @@ const userSchema = new mongoose.Schema({
     default: true,
     select: false,
   },
+  isVerified: {
+    type: Boolean,
+    default: false,
+    select: false,
+  },
+  verificationData: {
+    type: {
+      otp: String,
+      expiresAt: Date,
+    },
+    deafault: null,
+    select: false,
+  },
 });
 
 userSchema.pre('save', async function (next) {
