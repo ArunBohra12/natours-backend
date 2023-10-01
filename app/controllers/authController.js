@@ -7,17 +7,9 @@ import catchAsync from '../utils/catchAsync.js';
 import { filterUnwantedItems } from '../utils/filters.js';
 import { comparePassword } from '../utils/password.js';
 import { googleUserSignup } from './userController.js';
-
-const loginHandler = (userData, responseData, statusCode, res) => {
-  const jwt = new JwtHelper(process.env.JWT_SECRET_KEY);
-
-  const token = jwt.generateToken(userData, 90);
-
-  return res.status(statusCode).json({
-    ...responseData,
-    token,
-  });
-};
+import { emailAddressVerification } from '../utils/sendEmails.js';
+import CryptoHelper from '../helpers/cryptoHelper.js';
+import loginHandler from '../utils/loginHandler.js';
 
 export const signInWithGoogle = catchAsync(async (req, res, next) => {
   const authHelper = new GoogleAuthHelper();
@@ -83,7 +75,7 @@ export const googleAuthVerifyHandler = catchAsync(async (req, res, next) => {
 
     return loginHandler(
       { googleId: newUserId },
-      { status: true, message: 'Signed up successfully', data: { newUser } },
+      { status: true, message: 'Signed up successfully', data: { newUser: newUser.toObject() } },
       201,
       res
     );
@@ -133,4 +125,52 @@ export const loginWithPassword = catchAsync(async (req, res, next) => {
     200,
     res
   );
+});
+
+export const sendUserVerificationEmail = catchAsync(async (req, res) => {
+  await emailAddressVerification(req.email);
+
+  res.status(200).json({
+    status: true,
+    message: 'Email sent successfully',
+  });
+});
+
+export const verifyEmail = catchAsync(async (req, res, next) => {
+  const { otp } = req.body;
+
+  if (!otp) {
+    return next(new AppError('Please provide a value for the otp', 400));
+  }
+
+  const user = await User.findById(req.user._id).select('+verificationData');
+
+  if (!user || !user.verificationData) {
+    logger.error('User not found on authController.js:181');
+    return next(new AppError('Something went wrong, please try again', 404));
+  }
+
+  const now = new Date().getTime();
+  const expiryTime = user.verificationData.expiresAt.getTime();
+
+  if (now >= expiryTime) {
+    return next(new AppError('The OTP has expired. Please generate a new one!', 403));
+  }
+
+  const cryptoHelper = new CryptoHelper();
+  const actualOtp = cryptoHelper.decrypt(user.verificationData.otp);
+
+  if (actualOtp !== otp) {
+    return next(new AppError('OTP you provided is not correct. Please try again.', 403));
+  }
+
+  await User.findByIdAndUpdate(req.user._id, {
+    isVerified: true,
+    verificationData: null,
+  });
+
+  return res.status(200).json({
+    status: true,
+    message: 'Email verified successfully',
+  });
 });

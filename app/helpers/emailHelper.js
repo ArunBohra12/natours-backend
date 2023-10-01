@@ -27,7 +27,7 @@ class EmailHelper {
 
       return template;
     } catch (error) {
-      logger.info("Can't render the ejs template");
+      logger.error("Can't render the ejs template");
       logger.error(error);
       throw error;
     }
