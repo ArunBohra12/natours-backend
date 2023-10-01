@@ -4,6 +4,8 @@ import JwtHelper from '../helpers/jwtHelper.js';
 import logger from '../logger/logger.js';
 import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
+import { filterUnwantedItems } from '../utils/filters.js';
+import { comparePassword } from '../utils/password.js';
 import { googleUserSignup } from './userController.js';
 
 const loginHandler = (userData, responseData, statusCode, res) => {
@@ -89,14 +91,45 @@ export const googleAuthVerifyHandler = catchAsync(async (req, res, next) => {
 
   const existingUserId = existingUser.googleAccount.googleId;
   // Remove sensitive/unwanted data
-  existingUser.googleAccount = undefined;
-  existingUser.__v = undefined;
-  existingUser.password = undefined;
+  const filteredUserData = filterUnwantedItems(existingUser, ['googleAccount', '__v']);
 
   // Just login user if it already exists
   return loginHandler(
     { googleId: existingUserId },
-    { status: true, message: 'Logged in successfully', data: { user: existingUser } },
+    { status: true, message: 'Logged in successfully', data: { user: filteredUserData } },
+    200,
+    res
+  );
+});
+
+export const loginWithPassword = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return next(new AppError('Please provide all the details', 400));
+  }
+
+  const user = await User.findOne({ email }).select('+password');
+
+  if (!user) {
+    return next(new AppError('Incorrect email or password', 400));
+  }
+
+  const isPasswordValid = comparePassword(password, user.password);
+
+  if (!isPasswordValid) {
+    return next(new AppError('Incorrect email or password', 400));
+  }
+
+  const filteredUserData = filterUnwantedItems(user.toObject(), [
+    'password',
+    'googleAccount',
+    '__v',
+  ]);
+
+  return loginHandler(
+    { id: user._id },
+    { status: true, message: 'Logged in successfully', data: { user: filteredUserData } },
     200,
     res
   );
