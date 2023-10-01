@@ -1,6 +1,6 @@
-import bcrypt from 'bcrypt';
 import mongoose from 'mongoose';
 import validator from 'validator';
+import { hashPassword } from '../utils/password.js';
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -57,8 +57,7 @@ userSchema.pre('save', async function (next) {
   }
 
   if (this.isModified('password')) {
-    const salt = await bcrypt.genSalt(12);
-    const hash = await bcrypt.hash(this.password, salt);
+    const hash = hashPassword(this.password);
 
     this.password = hash;
   }
