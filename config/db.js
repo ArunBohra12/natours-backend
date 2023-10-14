@@ -7,7 +7,7 @@ const connectDB = async url => {
     await mongoose.connect(url);
     logger.info('Connected to the DB');
   } catch (error) {
-    logger.error(error);
+    logger.error(JSON.stringify(error));
     logger.error(`Unable to connect to the DB. URL: ${url}`);
   }
 };

@@ -48,7 +48,7 @@ export const emailAddressVerification = async userEmail => {
     await emailHelper.send();
   } catch (error) {
     logger.error('Error in sending verification email to user');
-    logger.error(error);
+    logger.error(JSON.stringify(error));
     throw error;
   }
 };
@@ -72,11 +72,12 @@ export const sendAdminLoginLink = async (adminDetails, token) => {
 
     await emailHelper.send();
   } catch (error) {
+    logger.error(JSON.stringify(error));
     if (error instanceof AppError) {
       throw error;
     } else {
       logger.error('Error in sending login link to admin');
-      logger.error(error);
+      logger.error(JSON.stringify(error));
       throw new AppError('Something went wrong. Unable to send login link.', 500);
     }
   }

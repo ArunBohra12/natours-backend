@@ -23,7 +23,7 @@ export const userSignup = catchAsync(async (req, res, next) => {
   try {
     await emailAddressVerification(userData.email);
   } catch (error) {
-    logger.error(error);
+    logger.error(JSON.stringify(error));
   }
 
   return loginHandler(

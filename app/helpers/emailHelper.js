@@ -28,7 +28,7 @@ class EmailHelper {
       return template;
     } catch (error) {
       logger.error("Can't render the ejs template");
-      logger.error(error);
+      logger.error(JSON.stringify(error));
       throw error;
     }
   }
@@ -110,7 +110,7 @@ class EmailHelper {
       };
     } catch (error) {
       logger.error('Unable to send mail with mailtrap');
-      logger.error(error);
+      logger.error(JSON.stringify(error));
 
       return {
         status: false,
