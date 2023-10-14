@@ -54,7 +54,7 @@ const generateAdminLoginToken = async adminId => {
     };
   } catch (error) {
     logger.error('Unable to generate magic link for admin login');
-    logger.error(error);
+    logger.error(JSON.stringify(error));
 
     return {
       status: false,
@@ -132,7 +132,7 @@ export const loginAdmin = catchAsync(async (req, res, next) => {
   const adminData = jwt.verifyToken(token);
 
   if (!adminData) {
-    logger.error('Invalid JWT');
+    logger.error('Sorry, something went wrong. Please try again.');
     return next(new AppError('Invalid reqest', 400));
   }
 
