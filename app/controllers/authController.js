@@ -9,7 +9,7 @@ import { comparePassword } from '../utils/password.js';
 import { googleUserSignup } from './userController.js';
 import { emailAddressVerification } from '../utils/sendEmails.js';
 import CryptoHelper from '../helpers/cryptoHelper.js';
-import loginHandler from '../utils/loginHandler.js';
+import { loginHandler } from '../utils/loginHandler.js';
 
 export const signInWithGoogle = catchAsync(async (req, res, next) => {
   const authHelper = new GoogleAuthHelper();
