@@ -35,6 +35,4 @@ if (process.env.ENABLE_LOGS === 'enable') {
 
 const logger = winston.createLogger({ transports: [...winstonTransports] });
 
-logger.error({ firstName: 'mohammad', lastName: 'alshraideh' });
-
 export default logger;
