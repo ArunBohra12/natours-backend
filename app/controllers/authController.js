@@ -120,7 +120,7 @@ export const loginWithPassword = catchAsync(async (req, res, next) => {
   ]);
 
   return loginHandler(
-    { id: user._id },
+    { _id: user._id },
     { status: true, message: 'Logged in successfully', data: { user: filteredUserData } },
     200,
     res
