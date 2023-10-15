@@ -128,7 +128,7 @@ export const loginWithPassword = catchAsync(async (req, res, next) => {
 });
 
 export const sendUserVerificationEmail = catchAsync(async (req, res) => {
-  await emailAddressVerification(req.email);
+  await emailAddressVerification(req.user.email);
 
   res.status(200).json({
     status: true,

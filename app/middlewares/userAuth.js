@@ -5,12 +5,12 @@ import User from '../models/userModel.js';
 import catchAsync from '../utils/catchAsync.js';
 
 export const isVerifiedUser = catchAsync(async (req, res, next) => {
-  if (!req.email) {
+  if (!req.user.email) {
     logger.error("Property email doesn't exist in req. userAuth.js:9");
     return next(new AppError("Can't proceed with the request, please try again", 400));
   }
 
-  const user = await User.findOne({ email: req.email }).select('+isVerified');
+  const user = await User.findOne({ email: req.user.email }).select('+isVerified');
 
   if (user.isVerified === true) {
     return next();
