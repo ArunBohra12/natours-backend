@@ -5,7 +5,7 @@ import { uploadProfileImage, uploadProfileImageFromUrl } from '../utils/imageUpl
 import { filterObject, filterUnwantedItems } from '../utils/filters.js';
 import { emailAddressVerification } from '../utils/sendEmails.js';
 import logger from '../logger/logger.js';
-import loginHandler from '../utils/loginHandler.js';
+import { loginHandler } from '../utils/loginHandler.js';
 
 export const userSignup = catchAsync(async (req, res, next) => {
   const userData = filterObject(req.body, ['name', 'email', 'password']);
@@ -23,7 +23,7 @@ export const userSignup = catchAsync(async (req, res, next) => {
   try {
     await emailAddressVerification(userData.email);
   } catch (error) {
-    logger.error(error);
+    logger.error(JSON.stringify(error));
   }
 
   return loginHandler(

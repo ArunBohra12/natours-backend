@@ -57,7 +57,7 @@ class GoogleAuthHelper {
 
       return response.data;
     } catch (error) {
-      logger.error(error);
+      logger.error(JSON.stringify(error));
       return false;
     }
   }

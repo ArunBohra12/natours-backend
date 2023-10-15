@@ -9,7 +9,7 @@ import { comparePassword } from '../utils/password.js';
 import { googleUserSignup } from './userController.js';
 import { emailAddressVerification } from '../utils/sendEmails.js';
 import CryptoHelper from '../helpers/cryptoHelper.js';
-import loginHandler from '../utils/loginHandler.js';
+import { loginHandler } from '../utils/loginHandler.js';
 
 export const signInWithGoogle = catchAsync(async (req, res, next) => {
   const authHelper = new GoogleAuthHelper();
@@ -41,8 +41,8 @@ export const googleAuthVerifyHandler = catchAsync(async (req, res, next) => {
   const tokens = await authHelper.getAuthTokens(code);
 
   if (!tokens || Object.keys(tokens).length === 0) {
-    logger.error(authHelper);
-    logger.error(tokens);
+    logger.error(JSON.stringify(authHelper));
+    logger.error(JSON.stringify(tokens));
     return next(new AppError('Google authentication failed. Please try again!', 400));
   }
 
@@ -56,7 +56,7 @@ export const googleAuthVerifyHandler = catchAsync(async (req, res, next) => {
 
   if (!googleName || !googleEmail || !googleSub) {
     logger.error('No data returned in google auth -> key: id_token');
-    logger.error(tokens);
+    logger.error(JSON.stringify(tokens));
     return next(new AppError('Google authentication failed. Please try again!', 400));
   }
 

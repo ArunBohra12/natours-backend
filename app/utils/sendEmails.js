@@ -5,6 +5,8 @@ import EmailHelper from '../helpers/emailHelper.js';
 import logger from '../logger/logger.js';
 import User from '../models/userModel.js';
 
+const emailHelper = new EmailHelper();
+
 export const emailAddressVerification = async userEmail => {
   try {
     const otp = Math.floor(100000 + Math.random() * 900000);
@@ -33,8 +35,7 @@ export const emailAddressVerification = async userEmail => {
       throw new AppError('User already verified', 204);
     }
 
-    const email = new EmailHelper();
-    await email.setEmailData({
+    await emailHelper.setEmailData({
       to: userEmail,
       subject: 'Verify email address',
       templateName: 'verifyEmail.ejs',
@@ -44,10 +45,40 @@ export const emailAddressVerification = async userEmail => {
       },
     });
 
-    await email.send();
+    await emailHelper.send();
   } catch (error) {
     logger.error('Error in sending verification email to user');
-    logger.error(error);
+    logger.error(JSON.stringify(error));
     throw error;
+  }
+};
+
+export const sendAdminLoginLink = async (adminDetails, token) => {
+  try {
+    if (!adminDetails.email || !adminDetails.name) {
+      logger.error('Admin details were not provided to send email');
+      throw new AppError('Something went wrong. Unable to send login link.', 400);
+    }
+
+    await emailHelper.setEmailData({
+      to: adminDetails.email,
+      subject: 'Login to Natours - Admin',
+      templateName: 'adminLoginLink.ejs',
+      templateData: {
+        name: adminDetails.name,
+        magicLink: `${process.env.CLIENT_APP_BASE_URL}/admin/login/${token}`,
+      },
+    });
+
+    await emailHelper.send();
+  } catch (error) {
+    logger.error(JSON.stringify(error));
+    if (error instanceof AppError) {
+      throw error;
+    } else {
+      logger.error('Error in sending login link to admin');
+      logger.error(JSON.stringify(error));
+      throw new AppError('Something went wrong. Unable to send login link.', 500);
+    }
   }
 };
