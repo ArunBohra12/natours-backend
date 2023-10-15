@@ -59,6 +59,7 @@ export const googleUserSignup = async (googleUserData, googleUserTokens) => {
       googleId: googleSub,
       refreshToken,
     },
+    isVerified: true,
   });
 
   // Remove sensitive/unwanted data

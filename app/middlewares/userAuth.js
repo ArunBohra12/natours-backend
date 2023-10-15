@@ -36,7 +36,15 @@ export const requiresLogin = catchAsync(async (req, res, next) => {
 
   const data = jwt.verifyToken(token.split(' ')[1]);
 
-  const user = await User.findById(data._id);
+  let user = null;
+
+  if (data._id) {
+    user = await User.findById(data._id);
+  }
+
+  if (data.googleId) {
+    user = await User.findOne({ 'googleAccount.googleId': data.googleId });
+  }
 
   if (!user) {
     return next(new AppError('Please login to continue', 403));
