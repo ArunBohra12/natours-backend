@@ -11,7 +11,7 @@ const getAllowedOrigins = async () => {
     return origins[0]?.urls || [];
   } catch (error) {
     logger.error('Error loading allowed origins');
-    logger.error(error);
+    logger.error(JSON.stringify(error));
     return new AppError('Internal server error', 500);
   }
 };

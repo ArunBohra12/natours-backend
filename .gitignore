@@ -4,7 +4,7 @@ config.env
 .env
 .vs
 .vscode
+/secrets/*
 
 # Ignore logs in the application
-
 app/logs

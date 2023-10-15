@@ -4,6 +4,7 @@ import globalErrorHandler from './app/error/globalErrorHandler.js';
 import userRouter from './app/routes/userRoutes.js';
 import tourRouter from './app/routes/tourRoutes.js';
 import authRouter from './app/routes/authRoutes.js';
+import adminRouter from './app/routes/admin/adminRoutes.js';
 import corsMiddleware from './app/middlewares/cors.js';
 import { requiresLogin } from './app/middlewares/userAuth.js';
 
@@ -24,6 +25,7 @@ app.get('/', requiresLogin, (req, res) => {
 app.use('/api/user', userRouter);
 app.use('/api/tour', tourRouter);
 app.use('/api/auth', authRouter);
+app.use('/api/admin', adminRouter);
 
 // Matches unavailable routes
 app.all('*', (req, res, next) => {
