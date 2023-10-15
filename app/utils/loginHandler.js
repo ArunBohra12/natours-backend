@@ -1,16 +1,21 @@
 import JwtHelper from '../helpers/jwtHelper.js';
 
-const loginHandler = (userData, responseData, statusCode, res) => {
-  console.log('🚀 ~ file: loginHandler.js:6 ~ loginHandler ~ logger:', userData);
-
-  const jwt = new JwtHelper(process.env.JWT_SECRET_KEY);
-
-  const token = jwt.generateToken(userData, '90d');
-
+// eslint-disable-next-line arrow-body-style
+const sendTokenToClient = (res, statusCode, responseData, token) => {
   return res.status(statusCode).json({
     ...responseData,
     token,
   });
 };
 
-export default loginHandler;
+export const loginHandler = (userData, responseData, statusCode, res) => {
+  const jwt = new JwtHelper(process.env.JWT_SECRET_KEY);
+  const token = jwt.generateToken(userData, process.env.JWT_EXPIRES_IN);
+  sendTokenToClient(res, statusCode, responseData, token);
+};
+
+export const adminLoginHandler = (adminData, responseData, statusCode, res) => {
+  const jwt = new JwtHelper(process.env.ADMIN_JWT_SECRET_KEY);
+  const token = jwt.generateToken(adminData, process.env.ADMIN_JWT_EXPIRES_IN);
+  sendTokenToClient(res, statusCode, responseData, token);
+};

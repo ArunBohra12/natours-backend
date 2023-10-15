@@ -39,8 +39,9 @@ class CloudinaryPresets {
       });
 
       logger.info('Success: Transform Profile Image Preset');
-    } catch (err) {
-      logger.error('Error: Transform Profile Image Preset', err);
+    } catch (error) {
+      logger.error('Error: Transform Profile Image Preset');
+      logger.error(JSON.stringify(error));
     }
   }
 

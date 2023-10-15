@@ -1,67 +1,38 @@
 import dotenv from 'dotenv';
-import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import winston from 'winston';
+import { ENV_FILE_PATH, logFileTimestamp, LOG_FILE_PATH, WINSTON_COLORS } from './loggerConfig.js';
 
-dotenv.config({
-  path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '..', '.env'),
-});
-
-const LOGS_DIR_PATH = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', './logs');
-
-const date = new Date()
-  .toLocaleString('en-GB', { year: 'numeric', month: 'numeric', day: 'numeric' })
-  .replaceAll('/', '-');
-
-winston.addColors({
-  info: 'bold blue',
-  warn: 'italic yellow',
-  error: 'bold red',
-});
+dotenv.config({ path: ENV_FILE_PATH });
+winston.addColors(WINSTON_COLORS);
 
 const winstonTransports = [];
 
-// Ignore info level on production
-const ignoreInfoLogsProduction = winston.format(info => {
-  if (process.env.NODE_ENV === 'production' && info.level === 'info') return false;
-
-  return info;
-});
-
 const consoleTransport = new winston.transports.Console({
   format: winston.format.combine(
-    ignoreInfoLogsProduction(),
     winston.format.colorize({ all: true }),
     winston.format.printf(info => `${info.level}: ${info.message}`)
   ),
 });
 
-// Write logs to *.log files only if enabled or is production
-if (process.env.NODE_ENV === 'production' || process.env.ENABLE_LOGS === 'enable') {
+// Ignore any kind of logs to console on production
+if (process.env.NODE_ENV === 'development') {
+  winstonTransports.push(consoleTransport);
+}
+
+// Write logs to *.log files only if enabled
+if (process.env.ENABLE_LOGS === 'enable') {
   const winstonFileFormatter = winston.format.combine(
-    winston.format.timestamp({ format: 'YY-MM-DD HH:mm:ss' }),
-    winston.format.printf(info => `${info.timestamp} :: ${info.level} : ${info.message}\n`),
-    winston.format.json({
-      space: 4,
-    })
+    winston.format.printf(info => `${logFileTimestamp} - ${info.level}: ${info.message}\n`)
   );
 
   winstonTransports.push(
     new winston.transports.File({
-      filename: `${LOGS_DIR_PATH}/${date}.error.log`,
-      level: 'error',
-      format: winstonFileFormatter,
-    })
-  );
-
-  winstonTransports.push(
-    new winston.transports.File({
-      filename: `${LOGS_DIR_PATH}/${date}.combined.log`,
+      filename: LOG_FILE_PATH,
       format: winstonFileFormatter,
     })
   );
 }
 
-const logger = winston.createLogger({ transports: [consoleTransport, ...winstonTransports] });
+const logger = winston.createLogger({ transports: [...winstonTransports] });
 
 export default logger;
