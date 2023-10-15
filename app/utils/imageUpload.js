@@ -49,7 +49,7 @@ export const uploadProfileImage = async (file, fileName) => {
         });
       })();
 
-      logger.error('Error deleting file: ', err);
+      logger.error(`Error deleting file: ${JSON.stringify(err)}`);
     });
   }
 };
