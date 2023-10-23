@@ -9,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 import dotenv from 'dotenv';
 import { v2 as cloudinary } from 'cloudinary';
-import logger from '../app/logger/logger';
+import logger from '../app/logger/logger.js';
 
 dotenv.config({ path: path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..', '.env') });
 
