@@ -1,6 +1,7 @@
 import logger from '../logger/logger.js';
 import AppError from '../error/appError.js';
 import Admin from '../models/adminModel.js';
+import { ADMIN } from '../../config/constants.js';
 import JwtHelper from '../helpers/jwtHelper.js';
 import catchAsync from '../utils/catchAsync.js';
 
@@ -21,7 +22,7 @@ export const requiresAdminLogin = catchAsync(async (req, res, next) => {
 
   const data = jwt.verifyToken(token.split(' ')[1]);
 
-  const admin = Admin.findById(data._id);
+  const admin = await Admin.findById(data._id).select('+role');
 
   if (!admin) {
     return next(new AppError('Please login to continue', 403));
@@ -30,3 +31,30 @@ export const requiresAdminLogin = catchAsync(async (req, res, next) => {
   req.admin = admin;
   next();
 });
+
+// Returns all admin levels that can access routes that minRole can
+const higherAdminRoles = minRole => {
+  switch (minRole) {
+    case ADMIN.highestLevelAdmin:
+      return [ADMIN.roles.admin];
+
+    case ADMIN.roles.editor:
+      return [ADMIN.roles.admin, ADMIN.roles.editor];
+
+    case ADMIN.roles.viewer:
+      return [ADMIN.roles.admin, ADMIN.roles.editor, ADMIN.roles.viewer];
+
+    default:
+      return [];
+  }
+};
+
+export const limitAccessTo = minAdminRole => (req, res, next) => {
+  const allHigherRoles = higherAdminRoles(minAdminRole);
+
+  if (!allHigherRoles.includes(req.admin.role)) {
+    return next(new AppError("Sorry, you're not able to perform this action!", 403));
+  }
+
+  next();
+};

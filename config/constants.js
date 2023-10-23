@@ -6,6 +6,6 @@ export const UPLOAD_PRESETS = {
 };
 
 export const ADMIN = {
-  roles: ['viewer', 'editor', 'admin'],
+  roles: { viewer: 'viewer', editor: 'editor', admin: 'admin' },
   highestLevelAdmin: 'admin',
 };
