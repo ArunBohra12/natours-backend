@@ -72,7 +72,7 @@ export const createAdmin = catchAsync(async (req, res, next) => {
 
   // If there is no role matching to input
   // Also check if the role is admin (that way anyone can add highest level admins)
-  if (role && !ADMIN.roles.includes(role) && role !== ADMIN.highestLevelAdmin) {
+  if (role && !ADMIN.roles[role] && role !== ADMIN.highestLevelAdmin) {
     return next(new AppError('Please select a correct role', 401));
   }
 
