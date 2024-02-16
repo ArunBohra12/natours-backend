@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import ApiError from './apiError';
+import env from '../environment/environment';
 
 const handleErrorsInDevelopment = (res: Response, err: ApiError) => {
   res.status(200).json({
@@ -37,7 +38,7 @@ const globalErrorHandler = (
     error = err;
   }
 
-  if (process.env.NODE_ENV === 'production') {
+  if (env.NODE_ENV === 'production') {
     return handleErrorsInProduction(res, error);
   }
 
