@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
 
 app.use(globalErrorHandler);
 
-// eslint-disable-next-line no-console
 app.listen(env.PORT, () =>
+  // eslint-disable-next-line no-console
   console.log(`Server is up and running on port ${env.PORT}`),
 );

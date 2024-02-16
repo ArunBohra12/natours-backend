@@ -15,7 +15,7 @@ const sanitizeEnv = (config: ApiEnvironment) => {
     throw new Error('NODE_ENV is missing or invalid in config.env');
   }
 
-  if (!config.PORT || isNaN(Number(config.PORT))) {
+  if (!config.PORT || Number.isNaN(Number(config.PORT))) {
     throw new Error('PORT is missing or is invalid in config.env');
   }
 };
