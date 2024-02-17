@@ -5,7 +5,11 @@
     "target": "ES2022",
     "moduleResolution": "NodeNext",
     "sourceMap": true,
-    "outDir": "dist"
+    "outDir": "dist",
+    "baseUrl": "./src",
+    "paths": {
+      "@core/*": ["core/*"]
+    }
   },
   "lib": ["es2022"]
 }

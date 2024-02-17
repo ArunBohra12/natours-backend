@@ -1,7 +1,7 @@
 import express from 'express';
 
-import globalErrorHandler from './core/errors/globalErrorHandler';
-import env from './core/environment/environment';
+import env from '@core/environment/environment';
+import globalErrorHandler from '@core/errors/globalErrorHandler';
 
 const app = express();
 

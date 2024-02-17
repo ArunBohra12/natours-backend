@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
+import env from '@core/environment/environment';
 import ApiError from './apiError';
-import env from '../environment/environment';
 
 const handleErrorsInDevelopment = (res: Response, err: ApiError) => {
   res.status(200).json({
