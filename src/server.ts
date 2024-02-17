@@ -1,5 +1,6 @@
 import express from 'express';
 
+import logger from '@core/logger/logger';
 import env from '@core/environment/environment';
 import globalErrorHandler from '@core/errors/globalErrorHandler';
 
@@ -15,6 +16,5 @@ app.get('/', (req, res) => {
 app.use(globalErrorHandler);
 
 app.listen(env.PORT, () =>
-  // eslint-disable-next-line no-console
-  console.log(`Server is up and running on port ${env.PORT}`),
+  logger.info(`Server is up and running on port ${env.PORT}`),
 );

@@ -4,6 +4,7 @@ import path from 'path';
 interface ApiEnvironment extends NodeJS.ProcessEnv {
   NODE_ENV: 'development' | 'production';
   PORT: string;
+  ENABLE_LOGS: 'enable' | 'disable';
 }
 
 /**
@@ -34,6 +35,7 @@ const getConfig = (): ApiEnvironment => {
     NODE_ENV:
       (process.env.NODE_ENV as 'development' | 'production') || 'development',
     PORT: process.env.PORT || '8000',
+    ENABLE_LOGS: (process.env.ENABLE_LOGS as 'enable' | 'disable') || 'disable',
   };
 
   sanitizeEnv(config);
