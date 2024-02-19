@@ -5,6 +5,12 @@ interface ApiEnvironment extends NodeJS.ProcessEnv {
   NODE_ENV: 'development' | 'production';
   PORT: string;
   ENABLE_LOGS: 'enable' | 'disable';
+  SENDGRID_API_KEY: string;
+  EMAIL_FROM: string;
+  MAILTRAP_HOST: string;
+  MAILTRAP_PORT: string;
+  MAILTRAP_USERNAME: string;
+  MAILTRAP_PASSWORD: string;
 }
 
 /**
@@ -36,6 +42,12 @@ const getConfig = (): ApiEnvironment => {
       (process.env.NODE_ENV as 'development' | 'production') || 'development',
     PORT: process.env.PORT || '8000',
     ENABLE_LOGS: (process.env.ENABLE_LOGS as 'enable' | 'disable') || 'disable',
+    SENDGRID_API_KEY: process.env.SENDGRID_API_KEY || '',
+    EMAIL_FROM: process.env.EMAIL_FROM || '',
+    MAILTRAP_HOST: process.env.MAILTRAP_HOST || '',
+    MAILTRAP_PORT: process.env.MAILTRAP_PORT || '',
+    MAILTRAP_USERNAME: process.env.MAILTRAP_USERNAME || '',
+    MAILTRAP_PASSWORD: process.env.MAILTRAP_PASSWORD || '',
   };
 
   sanitizeEnv(config);
