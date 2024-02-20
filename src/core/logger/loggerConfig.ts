@@ -9,7 +9,7 @@ export const WINSTON_COLORS = {
 } as const;
 
 // Log files will be named as - 23-05-2023.log
-const LOG_FILE_NAME = `${new Date()
+export const LOG_FILE_NAME = `${new Date()
   .toLocaleString('en-GB', {
     year: 'numeric',
     month: 'numeric',
@@ -17,10 +17,5 @@ const LOG_FILE_NAME = `${new Date()
   })
   .replaceAll('/', '-')}.log`;
 
-export const LOG_FILE_PATH = path.resolve(
-  __dirname,
-  '..',
-  '..',
-  './logs',
-  LOG_FILE_NAME,
-);
+export const getLogFilePath = (fileName: string): string =>
+  path.resolve(__dirname, '..', '..', './logs', fileName);

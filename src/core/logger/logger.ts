@@ -1,7 +1,7 @@
 import { addColors, transports, createLogger, format } from 'winston';
 
 import env from '@core/environment/environment';
-import { LOG_FILE_PATH, WINSTON_COLORS } from './loggerConfig';
+import { LOG_FILE_NAME, WINSTON_COLORS, getLogFilePath } from './loggerConfig';
 
 const { timestamp, json, colorize, combine } = format;
 
@@ -23,7 +23,7 @@ if (env.NODE_ENV === 'development') {
 // Write logs to *.log files only if enabled
 if (env.ENABLE_LOGS === 'enable') {
   const fileTransport = new transports.File({
-    filename: LOG_FILE_PATH,
+    filename: getLogFilePath(LOG_FILE_NAME),
     format: winstonFileFormatter,
     level: 'warn',
   });
@@ -43,7 +43,7 @@ const logger = createLogger({
   transports: [...winstonTransports],
   rejectionHandlers: [
     new transports.File({
-      filename: 'rejections.log',
+      filename: getLogFilePath('rejections.log'),
       format: winstonFileFormatter,
     }),
   ],
