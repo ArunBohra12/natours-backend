@@ -9,7 +9,8 @@
     "baseUrl": "./src",
     "paths": {
       "@core/*": ["core/*"],
-      "@email/*": ["email/*"]
+      "@email/*": ["email/*"],
+      "@api/*": ["api/*"]
     }
   },
   "lib": ["es2022"]
