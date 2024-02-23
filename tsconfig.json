@@ -10,7 +10,8 @@
     "paths": {
       "@core/*": ["core/*"],
       "@email/*": ["email/*"],
-      "@api/*": ["api/*"]
+      "@api/*": ["api/*"],
+      "@config/*": ["../config/*"]
     }
   },
   "lib": ["es2022"]

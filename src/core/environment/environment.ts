@@ -11,6 +11,11 @@ interface ApiEnvironment extends NodeJS.ProcessEnv {
   MAILTRAP_PORT: string;
   MAILTRAP_USERNAME: string;
   MAILTRAP_PASSWORD: string;
+  DATABASE_HOST: string;
+  DATABASE_NAME: string;
+  DATABASE_USER: string;
+  DATABASE_PASSWORD: string;
+  DATABASE_PORT: string;
 }
 
 /**
@@ -24,6 +29,20 @@ const sanitizeEnv = (config: ApiEnvironment) => {
 
   if (!config.PORT || Number.isNaN(Number(config.PORT))) {
     throw new Error('PORT is missing or is invalid in config.env');
+  }
+
+  if (
+    !config.DATABASE_HOST ||
+    !config.DATABASE_NAME ||
+    !config.DATABASE_PASSWORD ||
+    !config.DATABASE_USER ||
+    !config.DATABASE_PORT
+  ) {
+    throw new Error('Missing DB config in config.env');
+  }
+
+  if (Number.isNaN(Number(config.DATABASE_PORT))) {
+    throw new Error('Invalid PORT for the database provided');
   }
 };
 
@@ -48,6 +67,11 @@ const getConfig = (): ApiEnvironment => {
     MAILTRAP_PORT: process.env.MAILTRAP_PORT || '',
     MAILTRAP_USERNAME: process.env.MAILTRAP_USERNAME || '',
     MAILTRAP_PASSWORD: process.env.MAILTRAP_PASSWORD || '',
+    DATABASE_HOST: process.env.DATABASE_HOST || '',
+    DATABASE_NAME: process.env.DATABASE_NAME || '',
+    DATABASE_USER: process.env.DATABASE_USER || '',
+    DATABASE_PASSWORD: process.env.DATABASE_PASSWORD || '',
+    DATABASE_PORT: process.env.DATABASE_PORT || '',
   };
 
   sanitizeEnv(config);
