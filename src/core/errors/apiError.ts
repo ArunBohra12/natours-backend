@@ -179,5 +179,7 @@ export const generalError = (metadata?: unknown) => {
     err.addErrorMetadata(metadata);
   }
 
+  logger.error(err.serialize());
+
   return err;
 };

@@ -16,6 +16,7 @@ interface ApiEnvironment extends NodeJS.ProcessEnv {
   DATABASE_USER: string;
   DATABASE_PASSWORD: string;
   DATABASE_PORT: string;
+  USER_JWT_TOKEN: string;
 }
 
 /**
@@ -72,6 +73,7 @@ const getConfig = (): ApiEnvironment => {
     DATABASE_USER: process.env.DATABASE_USER || '',
     DATABASE_PASSWORD: process.env.DATABASE_PASSWORD || '',
     DATABASE_PORT: process.env.DATABASE_PORT || '',
+    USER_JWT_TOKEN: process.env.USER_JWT_TOKEN || '',
   };
 
   sanitizeEnv(config);
