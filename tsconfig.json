@@ -11,7 +11,8 @@
       "@core/*": ["core/*"],
       "@email/*": ["email/*"],
       "@api/*": ["api/*"],
-      "@config/*": ["../config/*"]
+      "@config/*": ["../config/*"],
+      "@utils/*": ["utils/*"]
     }
   },
   "lib": ["es2022"]

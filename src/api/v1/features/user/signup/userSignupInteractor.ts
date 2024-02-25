@@ -1,13 +1,28 @@
 import bcrypt from 'bcrypt';
-import validator from 'validator';
 
+import removeSensitiveDataFromUser from '@utils/dataTransformers/removeSensitiveData';
 import { validationError, generalError } from '@core/errors/apiError';
 import logger from '@core/logger/logger';
+
 import { User, UserSignupDataType } from '../userModel';
 import UserSignupInterface from './userSignupInterface';
 
+type ValidatorType = {
+  isEmail: (str: string) => boolean;
+  isLength: (
+    str: string,
+    options?: {
+      min?: number | undefined;
+      max?: number | undefined;
+    },
+  ) => boolean;
+};
+
 class UserSignupInteractor {
-  constructor(private userSignupInterface: UserSignupInterface) {}
+  constructor(
+    private userSignupInterface: UserSignupInterface,
+    private validator: ValidatorType,
+  ) {}
 
   private validate({
     name,
@@ -22,11 +37,11 @@ class UserSignupInteractor {
       throw validationError('Name, email and password are required');
     }
 
-    if (!validator.isEmail(email)) {
+    if (!this.validator.isEmail(email)) {
       throw validationError('Please pvovide a valid email');
     }
 
-    if (!validator.isLength(password, { min: 8 })) {
+    if (!this.validator.isLength(password, { min: 8 })) {
       throw validationError('Password must be at least 8 characters long');
     }
   }
@@ -82,12 +97,7 @@ class UserSignupInteractor {
     }
 
     const user = await this.signupUser({ name, email, password });
-    user.password = undefined;
-    user.created_at = undefined;
-    user.account_status = undefined;
-    user.is_verified = undefined;
-
-    return user;
+    return removeSensitiveDataFromUser(user);
   }
 }
 
