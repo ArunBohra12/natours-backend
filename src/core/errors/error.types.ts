@@ -8,6 +8,7 @@ export type ApiErrorInterface = {
   errorCategory?: ErrorCategory;
   stack?: string;
   meta: unknown;
+  addErrorMetadata(data: unknown): void;
 };
 
 /**

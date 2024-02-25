@@ -46,7 +46,9 @@
     "import/extensions": [
       "error",
       {
-        "js": "ignorePackages"
+        "js": "ignorePackages",
+        // ignore as .types extension is used for defining types in the project
+        "types": "ignorePackages"
       }
     ]
   }

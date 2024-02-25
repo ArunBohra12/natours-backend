@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 
 import env from '@core/environment/environment';
-import ApiError from './apiError';
+import { ApiError, internalError } from './apiError';
 
 const handleErrorsInDevelopment = (res: Response, err: ApiError) => {
   res.status(200).json({
@@ -27,13 +27,12 @@ const globalErrorHandler = (
   err: Error | ApiError,
   req: Request,
   res: Response,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction,
 ) => {
   let error: ApiError;
 
   if (!(err instanceof ApiError)) {
-    error = new ApiError(err.message, 500, 'AuthenticationError', 'Functional');
+    error = internalError(err.message);
   } else {
     error = err;
   }

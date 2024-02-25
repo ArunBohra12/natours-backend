@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import validator from 'validator';
 
-import ApiError from '@core/errors/apiError';
+import { validationError, generalError } from '@core/errors/apiError';
 import logger from '@core/logger/logger';
 import { User, UserSignupDataType } from '../userModel';
 import UserSignupInterface from './userSignupInterface';
@@ -19,39 +19,15 @@ class UserSignupInteractor {
     password: string;
   }) {
     if (!name || !email || !password) {
-      throw new ApiError(
-        'Name, email and password are required',
-        400,
-        'ValidationError',
-        'Operational',
-      );
-    }
-
-    if (!validator.isLength(name, { min: 2 })) {
-      throw new ApiError(
-        'Name must be at least 2 characters',
-        400,
-        'ValidationError',
-        'Operational',
-      );
+      throw validationError('Name, email and password are required');
     }
 
     if (!validator.isEmail(email)) {
-      throw new ApiError(
-        'Please provide a valid email',
-        400,
-        'ValidationError',
-        'Operational',
-      );
+      throw validationError('Please pvovide a valid email');
     }
 
     if (!validator.isLength(password, { min: 8 })) {
-      throw new ApiError(
-        'Password must be at least 8 characters long',
-        400,
-        'ValidationError',
-        'Operational',
-      );
+      throw validationError('Password must be at least 8 characters long');
     }
   }
 
@@ -61,13 +37,7 @@ class UserSignupInteractor {
         await this.userSignupInterface.userWithEmailExists(email);
       return userExists;
     } catch (error) {
-      const err = new ApiError(
-        'Something went wrong. Please try again.',
-        500,
-        'InternalError',
-        'Operational',
-      );
-
+      const err = generalError();
       logger.error(err.serialize());
 
       throw err;
@@ -93,13 +63,7 @@ class UserSignupInteractor {
       });
       return user;
     } catch (error) {
-      const err = new ApiError(
-        'Something went wrong. Please try again.',
-        500,
-        'InternalError',
-        'Operational',
-      );
-
+      const err = generalError();
       logger.error(err.serialize());
 
       throw err;
@@ -114,12 +78,7 @@ class UserSignupInteractor {
     this.validate({ name, email, password });
     const userExists = await this.checkIfEmailExists(email);
     if (userExists) {
-      throw new ApiError(
-        'Account with that email already exists',
-        400,
-        'ValidationError',
-        'Operational',
-      );
+      throw validationError('Account with that email already exists');
     }
 
     const user = await this.signupUser({ name, email, password });

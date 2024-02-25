@@ -1,6 +1,7 @@
+import logger from '@core/logger/logger';
 import { ApiErrorInterface, ErrorCategory, ErrorType } from './error.types';
 
-class ApiError extends Error implements ApiErrorInterface {
+export class ApiError extends Error implements ApiErrorInterface {
   public meta: unknown;
 
   constructor(
@@ -63,4 +64,120 @@ class ApiError extends Error implements ApiErrorInterface {
   }
 }
 
-export default ApiError;
+/**
+ * Internal server errors are handled here
+ * Logs the error as well
+ */
+export const internalError = (
+  message: string,
+  type: ErrorCategory = 'Operational',
+  metadata?: unknown,
+) => {
+  const err = new ApiError(message, 500, 'InternalError', type);
+
+  if (metadata) {
+    err.addErrorMetadata(metadata);
+  }
+
+  logger.error(err.serialize());
+
+  return err;
+};
+
+/**
+ * Error handling for validation errors
+ */
+export const validationError = (message: string, metadata?: unknown) => {
+  const err = new ApiError(message, 400, 'ValidationError', 'Operational');
+
+  if (metadata) {
+    err.addErrorMetadata(metadata);
+  }
+
+  return err;
+};
+
+/**
+ * Error for resource not found
+ */
+export const notFoundError = (message: string, metadata?: unknown) => {
+  const err = new ApiError(message, 404, 'NotFoundError', 'Operational');
+
+  if (metadata) {
+    err.addErrorMetadata(metadata);
+  }
+
+  return err;
+};
+
+/**
+ * Errors that happen during the auth process.
+ */
+export const authenticationError = (message: string, metadata?: unknown) => {
+  const err = new ApiError(message, 401, 'AuthenticationError', 'Operational');
+
+  if (metadata) {
+    err.addErrorMetadata(metadata);
+  }
+
+  return err;
+};
+
+/**
+ * Errors that happen during the auth process.
+ */
+export const authorizationError = (message: string, metadata?: unknown) => {
+  const err = new ApiError(message, 403, 'AuthorizationError', 'Operational');
+
+  if (metadata) {
+    err.addErrorMetadata(metadata);
+  }
+
+  return err;
+};
+
+/**
+ * All errors that occur or are related to the databse operations
+ */
+export const databaseError = (message: string, metadata?: unknown) => {
+  const err = new ApiError(message, 404, 'DatabaseError', 'Operational');
+
+  if (metadata) {
+    err.addErrorMetadata(metadata);
+  }
+
+  logger.error(err.serialize());
+
+  return err;
+};
+
+/**
+ * Errors that occur when dealing with file stystem
+ */
+export const fileSystemError = (message: string, metadata?: unknown) => {
+  const err = new ApiError(message, 500, 'FileSystemError', 'Operational');
+
+  if (metadata) {
+    err.addErrorMetadata(metadata);
+  }
+
+  return err;
+};
+
+/**
+ * General error message for the user
+ */
+export const generalError = (metadata?: unknown) => {
+  const err = new ApiError(
+    'Sorry something went wrong. Please try again.',
+    500,
+    'InternalError',
+    'Operational',
+  );
+
+  if (metadata) {
+    err.addErrorMetadata(metadata);
+  }
+
+  return err;
+};

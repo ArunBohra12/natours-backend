@@ -1,9 +1,9 @@
 import { Request, Response, NextFunction } from 'express';
 import cors from 'cors';
 
-import { Origin } from 'model/originModel';
-import ApiError from '@core/errors/apiError';
+import { ApiError, authorizationError } from '@core/errors/apiError';
 import env from '@core/environment/environment';
+import { Origin } from 'model/originModel';
 
 type CorsMiddlewareFunction = (
   fetchOrigins: (origin: string) => Promise<Origin[]>,
@@ -40,14 +40,7 @@ const corsMiddleware: CorsMiddlewareFunction =
           if (isOriginAllowed) {
             callback(null, true);
           } else {
-            callback(
-              new ApiError(
-                'Not allowed by CORS',
-                500,
-                'AuthorizationError',
-                'Operational',
-              ),
-            );
+            callback(authorizationError('Not allowed by CORS'));
           }
         },
       };
@@ -56,12 +49,7 @@ const corsMiddleware: CorsMiddlewareFunction =
       cors(corsOptions)(req, res, next);
     } catch (error) {
       // Pass the error to the error handling middleware
-      const err = new ApiError(
-        'Not allowed by CORS',
-        400,
-        'AuthorizationError',
-        'Operational',
-      );
+      const err = authorizationError('Not allowed by CORS');
       next(err);
     }
   };

@@ -11,7 +11,7 @@ import sendGrid from '@sendgrid/mail';
 
 import env from '@core/environment/environment';
 import logger from '@core/logger/logger';
-import ApiError from '@core/errors/apiError';
+import { internalError } from '@core/errors/apiError';
 import { EmailData } from './email.types';
 
 class Email {
@@ -41,13 +41,11 @@ class Email {
         error: JSON.stringify(error),
       });
 
-      const err = new ApiError(
+      const err = internalError(
         'Can not render the ejs template in email service',
-        500,
-        'InternalError',
         'Functional',
+        JSON.stringify(error),
       );
-      err.addErrorMetadata(JSON.stringify(err));
 
       throw err;
     }
@@ -117,13 +115,11 @@ class Email {
       const data = await transport.sendMail(mailData);
 
       if (data.rejected.length > 0) {
-        const err = new ApiError(
+        const err = internalError(
           'Can not send email with mailtrap',
-          503,
-          'InternalError',
           'Functional',
+          JSON.stringify(data),
         );
-        err.addErrorMetadata(JSON.stringify(data));
 
         throw err;
       }
@@ -135,13 +131,11 @@ class Email {
     } catch (error) {
       logger.error('Unable to send mail with mailtrap', JSON.stringify(error));
 
-      const err = new ApiError(
+      const err = internalError(
         'Unable to send mail with mailtrap',
-        500,
-        'InternalError',
         'Functional',
+        JSON.stringify(error),
       );
-      err.addErrorMetadata(JSON.stringify(error));
 
       throw err;
     }
@@ -149,13 +143,7 @@ class Email {
 
   public async sendMail() {
     if (!this.emailData) {
-      logger.error('No data for the email message');
-      throw new ApiError(
-        'No data for email message',
-        500,
-        'InternalError',
-        'Functional',
-      );
+      throw internalError('No data for the email message', 'Functional');
     }
 
     try {
@@ -172,15 +160,10 @@ class Email {
         data,
       };
     } catch (error) {
-      logger.error(
-        'Error in sending email to the client',
-        JSON.stringify(error),
-      );
-      const err = new ApiError(
+      const err = internalError(
         'Can not render the ejs template in email service',
-        500,
-        'InternalError',
         'Functional',
+        JSON.stringify(error),
       );
       err.addErrorMetadata(JSON.stringify(error));
 

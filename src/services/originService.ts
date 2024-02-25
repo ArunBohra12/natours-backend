@@ -2,8 +2,7 @@ import { QueryResult } from 'pg';
 
 import { Origin } from 'model/originModel';
 import getNewPool from '@config/db/dbConfig';
-import ApiError from '@core/errors/apiError';
-import logger from '@core/logger/logger';
+import { databaseError } from '@core/errors/apiError';
 
 /**
  * Fetches the origins from the database based on the provided role
@@ -18,17 +17,7 @@ const fetchOriginFromDatabase = async (origin: string): Promise<Origin[]> => {
 
     return result.rows;
   } catch (error) {
-    const err = new ApiError(
-      'Error in fetching origins',
-      500,
-      'DatabaseError',
-      'Functional',
-    );
-    err.cause = error;
-
-    logger.error(err.serialize());
-
-    throw err;
+    throw databaseError('Error fetching origins', error.message);
   }
 };
 
