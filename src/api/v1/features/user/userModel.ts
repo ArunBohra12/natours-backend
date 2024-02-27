@@ -14,3 +14,10 @@ export type UserSignupDataType = {
   email: string;
   password: string;
 };
+
+export type GoogleUserSignupDataType = {
+  name: string;
+  email: string;
+  picture: string;
+  refreshToken: string;
+};

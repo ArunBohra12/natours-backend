@@ -17,6 +17,9 @@ interface ApiEnvironment extends NodeJS.ProcessEnv {
   DATABASE_PASSWORD: string;
   DATABASE_PORT: string;
   USER_JWT_TOKEN: string;
+  GOOGLE_AUTH_CLIENT_ID: string;
+  GOOGLE_AUTH_CLIENT_SECRET: string;
+  GOOGLE_AUTH_REDIRECT_URL: string;
 }
 
 /**
@@ -74,6 +77,9 @@ const getConfig = (): ApiEnvironment => {
     DATABASE_PASSWORD: process.env.DATABASE_PASSWORD || '',
     DATABASE_PORT: process.env.DATABASE_PORT || '',
     USER_JWT_TOKEN: process.env.USER_JWT_TOKEN || '',
+    GOOGLE_AUTH_CLIENT_ID: process.env.GOOGLE_AUTH_CLIENT_ID || '',
+    GOOGLE_AUTH_CLIENT_SECRET: process.env.GOOGLE_AUTH_CLIENT_SECRET || '',
+    GOOGLE_AUTH_REDIRECT_URL: process.env.GOOGLE_AUTH_REDIRECT_URL || '',
   };
 
   sanitizeEnv(config);

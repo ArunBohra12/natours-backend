@@ -1,4 +1,4 @@
-import { sign, SignOptions, verify } from 'jsonwebtoken';
+import { SignOptions, sign, verify, decode } from 'jsonwebtoken';
 
 /**
  * Function to generate JWT token
@@ -20,3 +20,8 @@ export const verifyToken = (token: string, secret: string): unknown => {
     throw new Error('Invalid token');
   }
 };
+
+/**
+ * Function to decode JWT without verifying
+ */
+export const decodeToken = <T>(token: string): T => decode(token) as T;
